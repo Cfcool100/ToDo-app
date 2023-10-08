@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:todoey/models/task_data.dart';
 import '../components/add_task.dart';
 import '../components/task_list.dart';
+import '../constants.dart';
 
 class TaskScreen extends StatefulWidget {
   const TaskScreen({super.key});
@@ -13,41 +15,43 @@ class TaskScreen extends StatefulWidget {
 class _TaskScreenState extends State<TaskScreen> {
   @override
   Widget build(BuildContext context) {
+    final taskData = Provider.of<TaskData>(context);
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet<void>(
-            barrierColor: Colors.transparent,
             context: context,
-            builder: (BuildContext context) => AddTasks(),
+            builder: (BuildContext context) => const AddTasks(),
           );
         },
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: kPrimaryColor,
         child: const Icon(Icons.add),
       ),
-      backgroundColor: Colors.lightBlueAccent,
+      backgroundColor: kPrimaryColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Padding(
-            padding: EdgeInsets.only(top: 80, left: 30, right: 30, bottom: 30),
+          Padding(
+            padding:
+                const EdgeInsets.only(top: 80, left: 30, right: 30, bottom: 30),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   backgroundColor: Colors.white,
                   radius: 30.0,
                   child: Icon(
                     Icons.list,
                     size: 35.0,
-                    color: Colors.lightBlueAccent,
+                    color: kPrimaryColor,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 25.0,
                 ),
-                Text(
+                const Text(
                   'ToDoey',
                   style: TextStyle(
                       color: Colors.white,
@@ -55,8 +59,10 @@ class _TaskScreenState extends State<TaskScreen> {
                       fontWeight: FontWeight.w700),
                 ),
                 Text(
-                  '12 tasks',
-                  style: TextStyle(
+                  taskData.tasks!.length < 2
+                      ? '${taskData.tasks?.length} task'
+                      : '${taskData.tasks?.length} tasks',
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                   ),
@@ -70,21 +76,7 @@ class _TaskScreenState extends State<TaskScreen> {
                 horizontal: 20.0,
               ),
               width: double.infinity,
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0x00000000).withOpacity(0.79),
-                    offset: const Offset(0, -5.0),
-                    blurRadius: 5,
-                    spreadRadius: -5,
-                  ), //BoxShadow
-                ],
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
-                ),
-                color: Colors.white,
-              ),
+              decoration: kContainerCornerStyle,
               child: const TasksList(),
             ),
           ),
