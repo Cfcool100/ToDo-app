@@ -1,28 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:todoey/constants.dart';
 
-class TasksTile extends StatefulWidget {
-  const TasksTile({super.key});
+class TasksTile extends StatelessWidget {
+  const TasksTile(
+      {super.key,
+      required this.taskTitle,
+      required this.callBack,
+      this.isChecked,
+      this.onLongPress});
 
-  @override
-  State<TasksTile> createState() => _TasksTileState();
-}
-
-class _TasksTileState extends State<TasksTile> {
-  bool setCheckBox = false;
+  final bool? isChecked;
+  final String taskTitle;
+  final Function callBack;
+  final GestureLongPressCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text("Finish my course today",
-          style: TextStyle(
-              decoration: setCheckBox ? TextDecoration.lineThrough : null)),
+      onLongPress: onLongPress,
+      title: Text(
+        taskTitle,
+        style: TextStyle(
+            decoration: isChecked! ? TextDecoration.lineThrough : null),
+      ),
       trailing: Checkbox(
-        activeColor: Colors.lightGreen,
-        value: setCheckBox,
+        activeColor: kPrimaryColor,
+        value: isChecked,
+        // onChanged:
         onChanged: (value) {
-          setState(() {
-            setCheckBox = !setCheckBox;
-          });
+          callBack(value);
         },
       ),
     );
